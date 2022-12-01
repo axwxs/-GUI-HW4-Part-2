@@ -3,7 +3,7 @@ Full Name: Ali Rashid
 Date Created: 11/30/2022
 */
 
-
+// Enables two way binding and auto-submission of create_table function if the user changes the values and the form is valid
 function sliders() {
     // Slider for the minimum column value
     $("#colMinSlider").slider({
@@ -13,6 +13,9 @@ function sliders() {
         value: 0,
         slide: function(event, ui) {
             $("#colMin").val(ui.value);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
     // // Binding the value of the slider to the input field
@@ -26,6 +29,9 @@ function sliders() {
         }
         else {
             $("#colMinSlider").slider("option", "value", newval);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
 
@@ -37,6 +43,9 @@ function sliders() {
         value: 0,
         slide: function(event, ui) {
             $("#colMax").val(ui.value);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
     // // Binding the value of the slider to the input field
@@ -50,6 +59,9 @@ function sliders() {
         }
         else {
             $("#colMaxSlider").slider("option", "value", newval);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
 
@@ -61,6 +73,9 @@ function sliders() {
         value: 0,
         slide: function(event, ui) {
             $("#rowMin").val(ui.value);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
     // // Binding the value of the slider to the input field
@@ -74,6 +89,9 @@ function sliders() {
         }
         else {
             $("#rowMinSlider").slider("option", "value", newval);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
 
@@ -85,6 +103,9 @@ function sliders() {
         value: 0,
         slide: function(event, ui) {
             $("#rowMax").val(ui.value);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
     // // Binding the value of the slider to the input field
@@ -98,6 +119,9 @@ function sliders() {
         }
         else {
             $("#rowMaxSlider").slider("option", "value", newval);
+            if ($("#numberInputForm").valid() === true) {
+                $("#numberInputForm").submit();
+            }
         }
     });
 }
@@ -153,15 +177,24 @@ function validate() {
                 max: "Please enter a value less than or equal to 50",
             },
         },
-        // If the form is valid, the create_table function is called and so is the archive (tab) function
+        // If the form is valid, the create_table function is called
         submitHandler: function() {
             console.log("clicked");
             create_table();
-            tableArchiveFunction()
+            // tableArchiveFunction()
 
             return false;
-        }
+        },
     })
+
+    // Saves the table to the archive
+    $("#submit").click(function() {
+        if ($("#numberInputForm").valid() === true) {
+            tableArchiveFunction();
+        }
+    });
+
+
 }
 
 
@@ -192,6 +225,7 @@ create_table = function() {
 
     // Creates the actual result table w/o the headers
     var newTable = document.createElement("table")
+    newTable.classList.toggle("hidden-table")
     // newTable.setAttribute("id", "newTable")
     var newTbody = document.createElement("tbody")
     for (var i = minRowValue; i <= maxRowValue; i++) {
@@ -217,7 +251,7 @@ create_table = function() {
     mainTable.appendChild(newTable)
 
     // Creates the left header column and appends it to the table in proper place
-    var rowsToAppend = document.querySelectorAll("tr")
+    var rowsToAppend = document.querySelectorAll(".main-table-container tr")
     var rowValueToAdd = rStartValue
     for (var i = 1; i < rowsToAppend.length; i++) {
         rowsToAppend[i].innerHTML = `<th>${rowValueToAdd}</th>` + rowsToAppend[i].innerHTML
@@ -242,6 +276,30 @@ function tabs() {
         tabs.tabs("refresh");
     });
 
+    // This function clears all archived tabs
+    $("#clear").on("click", function() {
+        if ($("#tab-list").children().length > 1) {
+            // Gets the relevant li nodes and removes them similar to above but for all of them not just one
+            var myL = $("#tab-list").children()
+            myL = myL.slice(1, myL.length+1)
+            var [...tail] = myL
+            tail.forEach((x)=> {
+                x.remove("aria-controls");
+            });
+            // Gets the relevant div nodes and removes them similar to above but for all of them not just one
+            var myT = $("#tabs").children()
+            myT = myT.slice(2, myT.length+1)
+            var [...tail2] = myT
+            tail2.forEach((x)=> {
+                x.remove();
+            });
+            // Refreshes the tabs and resets the global variables
+            $("#tabs").tabs("refresh");
+            tabCount = 1
+            savedTables = []
+        }
+    })
+
 }
 
 function tableArchiveFunction() {
@@ -251,7 +309,7 @@ function tableArchiveFunction() {
     console.log(savedTables);
 
     // Creates the tab and appends it to the tab list
-    $( "div#tabs ul" ).append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>`);
+    $( "div#tabs ul" ).append(`<li><a href="#tab-${tabCount}">Table ${tabCount-1}</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>`);
 
 
     // Add the current multiplication table.
@@ -264,21 +322,5 @@ function tableArchiveFunction() {
     // Makes the new tab the active one
     $("#tabs").tabs("option", "active", -1);
 
-    // Cleaning up the tables unrelated values with a helper function defined below.
-    tableArchiveFunction2();
 }
 
-/*
-    Had an issue where the first <th> tag in a new tab's table was off because it had extra values. Couldn't find the
-     actual source of the issue despite my best efforts but this function fixes that by iterating over the table and
-     removing the extra values.
- */
-function tableArchiveFunction2() {
-    if (tabCount > 2) {
-        var j = tabCount;
-        while (j > 2) {
-            document.querySelectorAll(`#tab-${j - 1} > table > tbody > tr:nth-child(n) > th:nth-child(1)`).forEach((x) => x.remove())
-            j--;
-        }
-    }
-}

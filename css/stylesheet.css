@@ -59,6 +59,7 @@ form {
     overflow: auto;
 }
 
+
 /* Centers actual table within its wrapper */
 table {
     margin: auto;
@@ -144,4 +145,21 @@ span.ui-icon-close {
 p {
     margin-top: 2px;
     margin-bottom: 2px;
+}
+
+/* Clear button styling. Almost identical to the other button. */
+.clear-btn {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    /*width: 50%;*/
+
+    /*margin-top: 10px;*/
+    margin-bottom: 20px;
+    padding: 5px;
+    font-weight: bold;
+    background: #00818d;
+    color: white;
+    border-radius: 5px;
+    width: 25%
 }
