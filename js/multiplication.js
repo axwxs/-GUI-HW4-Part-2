@@ -506,27 +506,6 @@ create_table = function() {
     var maxRowValue = Math.max(vals[2], vals[3])
 
 
-    /*
-
-    // Error checking
-    try {
-        if(cStartValue === "" || cEndValue === "" || rStartValue === "" || rEndValue === "")  throw "One or more of the input values are empty";
-        if(isNaN(minColValue) || isNaN(maxColValue) || isNaN(minRowValue) || isNaN(maxRowValue)) throw "One or more of the input values is not a number";
-        if(minColValue < -50 || minRowValue < -50)  throw "One or more of the input values is less than -50";
-        if(maxColValue > 50 || maxRowValue > 50)  throw "One or more of the input values is greater than 50";
-        if ((!isInt(minColValue) || !isInt(maxColValue) || !isInt(minRowValue) || !isInt(maxRowValue))) throw "One or more of the input values is not an integer";
-
-        if(parseInt(cEndValue) < parseInt(cStartValue)) throw "The maximum column value is less than the minimum column value";
-        if(parseInt(rEndValue) < parseInt(rStartValue)) throw "The maximum row value is less than the minimum row value";
-    }
-    catch(err) {
-        mainTable.innerHTML = `<h3 class="error-message">Error: ${err}<br>Please try again</h3>`;
-        return;
-    }
-
-     */
-
-
     // Creates the actual result table w/o the headers
     var newTable = document.createElement("table")
     // newTable.setAttribute("id", "newTable")
@@ -569,7 +548,15 @@ var tabCount = 1
 var savedTables = []
 
 function tabs() {
-    $("#tabs").tabs();
+    var tabs = $("#tabs").tabs();
+
+    // For removing tabs, comes directly from the jQuery UI docs
+    tabs.delegate("span.ui-icon-close", "click", function () {
+        var panelId = $(this).closest("li").remove().attr("aria-controls");
+        $("#" + panelId).remove();
+        tabs.tabs("refresh");
+    });
+
 }
 
 function tableArchiveFunction() {
@@ -585,24 +572,43 @@ function tableArchiveFunction() {
 
 
     tabCount++
-    savedTables.push($(".main-table-container").html());
+    savedTables.push(document.querySelector(".main-table-container").innerHTML);
     console.log(savedTables);
     // $("#tab-list").append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a></li>`)
     // $("#tabs").append(`<div id="tab-${tabCount}">${savedTables[tabCount]}</div>`)
 
-    $( "div#tabs ul" ).append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a></li>`);
+    $( "div#tabs ul" ).append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a><span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>`);
 
     var currentTable = $(".main-table-container").html()
     var tableClone = document.getElementsByTagName("table")[0].cloneNode(true)
     tableClone.removeAttribute("id");
     // Add the current multiplication table.
-    $("div#tabs").append(`<div id="tab-${tabCount}"></div>`)
+    $("div#tabs").append(`<div id="tab-${tabCount}">${savedTables[savedTables.length - 1]}</div>`)
+
     //jQuery("#tab-2").html(savedTables[1])
-    $(`#tab-${tabCount}`).html(savedTables[savedTables.length - 1])
+    // $(`#tab-${tabCount}`).html(savedTables[savedTables.length - 1])
 
-    // Refresh the tabs div so that the new tab shows up.
-    $( "#tabs" ).tabs("refresh");
+    // Refreshes the tabs
+    $("#tabs").tabs("refresh");
 
-    // Make the new tab active, so that the user knows it updated.
-    $( "#tabs" ).tabs("option", "active", -1);
+    // Makes the new tab the active one
+    $("#tabs").tabs("option", "active", -1);
+
+    // Cleaning up the tables unrelated values with a helper function defined below.
+    tableArchiveFunction2();
+}
+
+/*
+    Had an issue where the first <th> tag in a new tab's table was off because it had extra values. Couldn't find the
+     actual source of the issue despite my best efforts but this function fixes that by iterating over the table and
+     removing the extra values.
+ */
+function tableArchiveFunction2() {
+    if (tabCount > 2) {
+        var j = tabCount;
+        while (j > 2) {
+            document.querySelectorAll(`#tab-${j - 1} > table > tbody > tr:nth-child(n) > th:nth-child(1)`).forEach((x) => x.remove())
+            j--;
+        }
+    }
 }

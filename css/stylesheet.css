@@ -116,4 +116,26 @@ table td:first-child {
     justify-content: center;
     margin: 0 auto;
     width: 80%;
+    margin-bottom: 40px
+}
+
+.ui-slider {
+    margin-bottom: 25px;
+}
+
+.error {
+    display: flex;
+    justify-content: center;
+    color: red;
+    /*text-transform: uppercase;*/
+    font-weight: bolder;
+}
+
+span.ui-icon-close {
+    cursor: pointer;
+}
+
+p {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
