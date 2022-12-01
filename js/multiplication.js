@@ -1,5 +1,5 @@
 
-var tabCount = 1
+
 
 function sliders() {
     // Slider for the minimum column value
@@ -154,6 +154,8 @@ function validate() {
         submitHandler: function() {
             console.log("clicked");
             create_table();
+            tableArchiveFunction()
+
             return false;
         }
     })
@@ -527,7 +529,7 @@ create_table = function() {
 
     // Creates the actual result table w/o the headers
     var newTable = document.createElement("table")
-    newTable.setAttribute("id", "newTable")
+    // newTable.setAttribute("id", "newTable")
     var newTbody = document.createElement("tbody")
     for (var i = minRowValue; i <= maxRowValue; i++) {
         var tr = document.createElement("tr");
@@ -563,7 +565,44 @@ create_table = function() {
     // return false;
 }
 
+var tabCount = 1
+var savedTables = []
 
 function tabs() {
     $("#tabs").tabs();
+}
+
+function tableArchiveFunction() {
+    // var tableArchive = document.getElementById("table-archive")
+    // var table = document.getElementById("newTable")
+    // var tableClone = table.cloneNode(true)
+    // tableClone.setAttribute("id", `table${tabCount}`)
+    // tableClone.setAttribute("class", "table-archive-table")
+    // tableClone.setAttribute("style", "display: none")
+    // tableArchive.appendChild(tableClone)
+    // tabCount++
+    // tabs()
+
+
+    tabCount++
+    savedTables.push($(".main-table-container").html());
+    console.log(savedTables);
+    // $("#tab-list").append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a></li>`)
+    // $("#tabs").append(`<div id="tab-${tabCount}">${savedTables[tabCount]}</div>`)
+
+    $( "div#tabs ul" ).append(`<li><a href="#tab-${tabCount}">Table ${tabCount}</a></li>`);
+
+    var currentTable = $(".main-table-container").html()
+    var tableClone = document.getElementsByTagName("table")[0].cloneNode(true)
+    tableClone.removeAttribute("id");
+    // Add the current multiplication table.
+    $("div#tabs").append(`<div id="tab-${tabCount}"></div>`)
+    //jQuery("#tab-2").html(savedTables[1])
+    $(`#tab-${tabCount}`).html(savedTables[savedTables.length - 1])
+
+    // Refresh the tabs div so that the new tab shows up.
+    $( "#tabs" ).tabs("refresh");
+
+    // Make the new tab active, so that the user knows it updated.
+    $( "#tabs" ).tabs("option", "active", -1);
 }
