@@ -61,7 +61,217 @@ $(document).ready(function() {
 
 
     })
+
+    $("#numberInputForm").on("change", function() {
+    //
+    //     var inputValues = [parseInt($("#colMin").val()), parseInt($("#colMax").val()), parseInt($("#rowMin").val()), parseInt($("#rowMax").val())];
+    //     console.log(inputValues);
+    //
+    //     var sliderValues = [parseInt($("#colMinSlider").val()), parseInt($("#colMaxSlider").val()), parseInt($("#rowMinSlider").val()), parseInt($("#rowMaxSlider").val())];
+    //     console.log(sliderValues);
+
+        updateValues();
+
+    })
+
 })
+
+$(function (){
+    $("#colMinSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#colMin").val(ui.value);
+        }
+    });
+    var initialColMin = $("#colMinSlider").slider("option", "value");
+    $("#colMin").val(initialColMin);
+
+    $("#colMaxSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#colMax").val(ui.value);
+        }
+    });
+    var initialColMax = $("#colMaxSlider").slider("option", "value");
+    $("#colMax").val(initialColMax);
+
+    $("#rowMinSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#rowMin").val(ui.value);
+        }
+    });
+    var initialRowMin = $("#rowMinSlider").slider("option", "value");
+    $("#rowMin").val(initialRowMin);
+
+    $("#rowMaxSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#rowMax").val(ui.value);
+        }
+    });
+    var initialRowMax = $("#rowMaxSlider").slider("option", "value");
+    $("#rowMax").val(initialRowMax);
+
+});
+
+function updateValues() {
+    var inputValues = [parseInt($("#colMin").val()), parseInt($("#colMax").val()), parseInt($("#rowMin").val()), parseInt($("#rowMax").val())];
+    console.log(inputValues);
+
+    var sliderValues = [parseInt($("#colMinSlider").val()), parseInt($("#colMaxSlider").val()), parseInt($("#rowMinSlider").val()), parseInt($("#rowMaxSlider").val())];
+    console.log(sliderValues);
+
+
+    $("#colMinSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#colMin").val(ui.value);
+        }
+    });
+
+    var initialColMin = $("#colMinSlider").slider("option", "value");
+    $("#colMin").val(initialColMin);
+    $("#colMin").change(function() {
+        var oldval = $("#colMinSlider").slider("option", "value");
+        var newval = $(this).val();
+        if (isNaN(newval)) {
+            $("#colMin").val(oldval);
+        }
+        else {
+            $("#colMinSlider").slider("option", "value", newval);
+        }
+    });
+}
+
+function updateValues() {
+    // Slider for the minimum column value
+    $("#colMinSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#colMin").val(ui.value);
+        }
+    });
+    // Binding the value of the slider to the input field
+    var initialColMin = $("#colMinSlider").slider("option", "value");
+    $("#colMin").val(initialColMin);
+    $("#colMin").change(function() {
+        var oldval = $("#colMinSlider").slider("option", "value");
+        var newval = $(this).val();
+        if (isNaN(newval)) {
+            $("#colMin").val(oldval);
+        }
+        else {
+            $("#colMinSlider").slider("option", "value", newval);
+        }
+    });
+
+    // Slider for the maximum column value
+    $("#colMaxSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#colMax").val(ui.value);
+        }
+    });
+    // Binding the value of the slider to the input field
+    var initialColMax = $("#colMaxSlider").slider("option", "value");
+    $("#colMax").val(initialColMax);
+    $("#colMax").change(function() {
+        var oldval = $("#colMaxSlider").slider("option", "value");
+        var newval = $(this).val();
+        if (isNaN(newval)) {
+            $("#colMax").val(oldval);
+        }
+        else {
+            $("#colMaxSlider").slider("option", "value", newval);
+        }
+    });
+
+    // Slider for the minimum row value
+    $("#rowMinSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#rowMin").val(ui.value);
+        }
+    });
+    // Binding the value of the slider to the input field
+    // var initialRowMin = $("#rowMinSlider").slider("option", "value");
+    // $("#rowMin").val(initialRowMin);
+    $("#rowMin").on("ch", function() {
+        var oldval = $("#rowMinSlider").slider("option", "value");
+        var newval = $(this).val();
+        if (isNaN(newval)) {
+            $("#rowMin").val(oldval);
+        }
+        else {
+            $("#rowMinSlider").slider("option", "value", newval);
+        }
+    });
+
+    // Slider for the maximum row value
+    $("#rowMaxSlider").slider({
+        min: -50,
+        max: 50,
+        step: 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#rowMax").val(ui.value);
+        }
+    });
+    // Binding the value of the slider to the input field
+    var initialRowMax = $("#rowMaxSlider").slider("option", "value");
+    $("#rowMax").val(initialRowMax);
+    $("#rowMax").change(function() {
+        var oldval = $("#rowMaxSlider").slider("option", "value");
+        var newval = $(this).val();
+        if (isNaN(newval)) {
+            $("#rowMax").val(oldval);
+        }
+        else {
+            $("#rowMaxSlider").slider("option", "value", newval);
+        }
+    });
+
+}
+
+/*
+    var initialValue = $("#slider").slider("option", "value");
+  $("#slidervalue").val(initialValue);
+  $("#slidervalue").change(function() {
+    var oldVal = $("#slider").slider("option", "value");
+    var newVal = $(this).val();
+    if (isNaN(newVal) || newVal < 10 || newVal > 100) {
+      $("#slidervalue").val(oldVal);
+    } else {
+      $("#slider").slider("option", "value", newVal);
+    }
+  });
+ */
+
 
 // Main function. Takes two valid inputs and creates a multiplication table. Throws an error if the inputs are invalid.
 create_table = function() {
